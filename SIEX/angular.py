@@ -3,6 +3,21 @@ import scrapy
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
+# Drivers para chrome y otros navegadores basados en chromium
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.core.utils import ChromeType
+
+# Drivers para Edge
+from selenium.webdriver.edge.service import Service as EdgeService
+from webdriver_manager.microsoft import EdgeChromiumDriverManager as EdgeDriverManager
+
+# Drivers para firefox
+from selenium.webdriver.firefox.service import Service as FirefoxService
+from webdriver_manager.firefox import GeckoDriverManager
+
+
+# VARIABLES
 url = 'https://www3.sede.fega.gob.es/bdcsixpor/mantenimiento-de-tablas'
 
 list_selector =     '.menu_hijos'
@@ -16,8 +31,26 @@ class AngularSpider(scrapy.Spider):
 
     # Inicializar webdriver
     def __init__(self):
-        self.driver = webdriver.Firefox()
-        profile = self.driver.profile
+
+        ## Firefox
+        service = FirefoxService(GeckoDriverManager().install())
+        self.driver = webdriver.Firefox(service = service)
+
+        ## Chromium (sin testear)
+        # service = ChromeService(ChromeDriverManager().install())
+        # self.driver = webdriver.Chrome(service = service)
+
+        ## Edge (sin testear)
+        # service = EdgeService(EdgeDriverManager().install())
+        # self.driver = webdriver.Edge(service = service)
+
+        ## Chromium (sin testear)
+        # service = ChromeService(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
+        # self.driver = webdriver.Chrome(service = service)
+
+        ## Brave (sin testear)
+        # service = ChromeService(ChromeDriverManager(chrome_type=ChromeType.BRAVE).install())
+        # self.driver = webdriver.Chrome(service = service)
 
         # if (profile):
         #     profile.set_preference("browser.download.folderList", 2)
