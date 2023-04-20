@@ -32,7 +32,7 @@ pip install scrapy selenium webdriver-manager
 **Instalar Firefox (u otro navegador soportado)**  
 <https://www.mozilla.org/es-ES/firefox/new/>
 
-_Si pretenden usar los scripts con alguno de los navegadores no soportados, será necesario modificar el código fuente para que algunos de ellos funcionen_
+_Si se pretende usar los scripts con alguno de los navegadores no soportados, será necesario modificar el código fuente para que algunos de ellos funcionen_
 
 # Uso
 
