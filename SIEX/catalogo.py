@@ -25,8 +25,8 @@ link_selector =     'p-panelmenusub .p-menuitem'
 boton_selector =    'app-boton-exportar button'
 cerrar_selector =   'p-dialog button.p-dialog-header-close'
 
-class AngularSpider(scrapy.Spider):
-    name = 'angular_spider'
+class CatalogoSpider(scrapy.Spider):
+    name = 'catalogo_spider'
     start_urls = [ url ]
 
     # Inicializar webdriver
