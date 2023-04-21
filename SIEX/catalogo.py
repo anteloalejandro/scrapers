@@ -40,30 +40,44 @@ class CatalogoSpider(scrapy.Spider):
             os.makedirs(download_dir)
 
         # Configuración de firefox
-        profile = webdriver.FirefoxProfile()
-        if (profile):
-            profile.set_preference("browser.download.folderList", 2)
-            profile.set_preference("browser.download.dir", download_dir)
+        firefox_profile = webdriver.FirefoxProfile()
+        if firefox_profile:
+            firefox_profile.set_preference("browser.download.folderList", 2)
+            firefox_profile.set_preference("browser.download.dir", download_dir)
+
+        # Configuración de chrome
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_experimental_option('prefs', {
+            "download.default_directory": download_dir,
+            "download.prompt_for_download": False,
+            "download.directory_upgrade": True
+        })
+
+        # Configuración de Edge
+        edge_options = webdriver.EdgeOptions()
+        edge_options.add_experimental_option('prefs', {
+            "download.default_directory": download_dir,
+        })
 
         # Firefox
         service = FirefoxService(GeckoDriverManager().install())
-        self.driver = webdriver.Firefox(service = service, firefox_profile=profile)
+        self.driver = webdriver.Firefox(service = service, firefox_profile=firefox_profile)
 
         ## Chromium (sin testear)
         # service = ChromeService(ChromeDriverManager().install())
-        # self.driver = webdriver.Chrome(service = service)
+        # self.driver = webdriver.Chrome(service = service, chrome_options=chrome_options)
 
         ## Edge (sin testear)
         # service = EdgeService(EdgeDriverManager().install())
-        # self.driver = webdriver.Edge(service = service)
+        # self.driver = webdriver.Edge(service = service, options=edge_options)
 
         ## Chromium (sin testear)
         # service = ChromeService(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
-        # self.driver = webdriver.Chrome(service = service)
+        # self.driver = webdriver.Chrome(service = service, chrome_options=chrome_options)
 
         ## Brave (sin testear)
         # service = ChromeService(ChromeDriverManager(chrome_type=ChromeType.BRAVE).install())
-        # self.driver = webdriver.Chrome(service = service)
+        # self.driver = webdriver.Chrome(service = service, chrome_options=chrome_options)
 
     # Ejecutar el código principal por cada una de las URLs
     def start_requests(self):
