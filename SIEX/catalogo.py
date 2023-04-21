@@ -74,25 +74,23 @@ class CatalogoSpider(scrapy.Spider):
     def find(self, selector, parent = None):
         max_tries = 20
         sleep_time = .05
-        element = parent
-        if (element == None): element = self.driver
+        element = parent if parent else self.driver
 
         elements = element.find_elements(By.CSS_SELECTOR, selector)
         while (len(elements) == 0 and max_tries > 0):
             max_tries -= 1
-            print('\n\n Could not find any elements, trying again \n\n')
+            print('\n\n No se han encontrado elementos, intentando de nuevo \n\n')
             sleep(sleep_time)
             element.find_elements(By.CSS_SELECTOR, selector)
 
+        if max_tries <= 0: print('\n\n Intentos máximos superados \n\n')
+
         return elements
 
-    # Devuleve o un WebElement o None si no existe
+    # Devuleve un WebElement o None si no existe
     def findOne(self, selector, parent = None):
         elements = self.find(selector, parent)
-        if len(elements) > 0:
-            return elements[0]
-        else:
-            return None
+        return elements[0] if len(elements) > 0 else None
 
     # Recorre la página y ejecuta el código principal
     def parse(self, response):
