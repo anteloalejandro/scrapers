@@ -1,4 +1,5 @@
 from time import sleep
+import os
 import scrapy
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -32,9 +33,21 @@ class CatalogoSpider(scrapy.Spider):
     # Inicializar webdriver
     def __init__(self):
 
-        ## Firefox
+        # Directorio de descarga
+        script_name = os.path.basename(os.path.splitext(__file__)[0])
+        download_dir = os.path.dirname(__file__) + '/downloads/' + script_name
+        if not os.path.isdir(download_dir):
+            os.makedirs(download_dir)
+
+        # Configuración de firefox
+        profile = webdriver.FirefoxProfile()
+        if (profile):
+            profile.set_preference("browser.download.folderList", 2)
+            profile.set_preference("browser.download.dir", download_dir)
+
+        # Firefox
         service = FirefoxService(GeckoDriverManager().install())
-        self.driver = webdriver.Firefox(service = service)
+        self.driver = webdriver.Firefox(service = service, firefox_profile=profile)
 
         ## Chromium (sin testear)
         # service = ChromeService(ChromeDriverManager().install())
@@ -51,10 +64,6 @@ class CatalogoSpider(scrapy.Spider):
         ## Brave (sin testear)
         # service = ChromeService(ChromeDriverManager(chrome_type=ChromeType.BRAVE).install())
         # self.driver = webdriver.Chrome(service = service)
-
-        # if (profile):
-        #     profile.set_preference("browser.download.folderList", 2)
-        #     profile.set_preference("browser.download.dir", '<ruta a la carpeta de descarga>')
 
     # Ejecutar el código principal por cada una de las URLs
     def start_requests(self):

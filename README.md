@@ -4,7 +4,13 @@ Scrapers hechos en python.
 
 ## Scrapers disponibles
 
-- SIEX/catalogo: Obtiene todos los CSVs automáticamente del sitio web <https://www3.sede.fega.gob.es/bdcsixpor/mantenimiento-de-tablas>
+### catalogo
+
+Ruta: `SIEX/catalogo.py`.
+
+Obtiene todos los CSVs automáticamente del sitio web <https://www3.sede.fega.gob.es/bdcsixpor/mantenimiento-de-tablas>.
+
+Descarga los archivos en `SIEX/downloads/catalogo`.
 
 # Dependencias
 
