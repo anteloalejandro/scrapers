@@ -1,4 +1,5 @@
 from time import sleep
+from os.path import join
 import os
 import scrapy
 from selenium import webdriver
@@ -22,6 +23,7 @@ from selenium.webdriver.firefox.options import Options as FirefoxOptions
 # VARIABLES
 url = 'https://www3.sede.fega.gob.es/bdcsixpor/mantenimiento-de-tablas'
 
+parent_selector =       'p-panelmenu'
 list_selector =         '.menu_hijos'
 list_name_selector =    '.p-menuitem-text'
 link_selector =         'p-panelmenusub .p-menuitem'
@@ -38,7 +40,7 @@ class CatalogoSpider(scrapy.Spider):
 
         # Directorio de descarga
         script_name = os.path.basename(os.path.splitext(__file__)[0])
-        self.download_dir = os.path.dirname(__file__) + '/downloads/' + script_name
+        self.download_dir = join(join(os.path.dirname(__file__), 'downloads' ), script_name)
         if not os.path.isdir(self.download_dir):
             os.makedirs(self.download_dir)
 
@@ -113,7 +115,7 @@ class CatalogoSpider(scrapy.Spider):
         sleep_time = .5
 
         # Directorio en el que se guardará
-        target_dir = self.download_dir + '/' + dir
+        target_dir = join(self.download_dir, dir)
         if not os.path.isdir(target_dir):
             os.makedirs(target_dir)
 
@@ -128,8 +130,8 @@ class CatalogoSpider(scrapy.Spider):
             sleep(sleep_time)
 
             # Obtener lista de ficheros
-            files = [f for f in os.listdir(self.download_dir) if os.path.isfile(os.path.join(self.download_dir, f))]
-            files.sort(key = lambda x: os.stat(self.download_dir + '/' + x).st_mtime)
+            files = [f for f in os.listdir(self.download_dir) if os.path.isfile(join(self.download_dir, f))]
+            files.sort(key = lambda x: os.stat(join(self.download_dir, x)).st_mtime)
 
             # Comprobar si se ha descargado
             last_file = files[len(files) - 1]
@@ -147,8 +149,8 @@ class CatalogoSpider(scrapy.Spider):
         self.last_file_list = files
 
         # Mover archivo
-        old_path = self.download_dir + '/' + last_file
-        new_path = target_dir + '/' + last_file
+        old_path = join(self.download_dir, last_file)
+        new_path = join(target_dir, last_file)
         os.rename(old_path, new_path)
 
         return True
