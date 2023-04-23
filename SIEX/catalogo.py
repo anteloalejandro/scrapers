@@ -151,6 +151,9 @@ class CatalogoSpider(scrapy.Spider):
         # Mover archivo
         old_path = join(self.download_dir, last_file)
         new_path = join(target_dir, last_file)
+        # En Linux/Unix mover sobreescribe, en Windows no
+        if os.path.isfile(new_path):
+            os.remove(new_path)
         os.rename(old_path, new_path)
 
         return True
@@ -160,7 +163,12 @@ class CatalogoSpider(scrapy.Spider):
     def parse(self, response):
         self.driver.get(response.url)
 
+        # Evitar página de error 404 cuando el navegador es lento
         sleep(1)
+        while self.driver.current_url != response.url:
+            self.driver.get(response.url)
+            sleep(1)
+
         elements = self.find(list_selector)
         for element in elements:
             nameElement = self.findOne(list_name_selector, element)
