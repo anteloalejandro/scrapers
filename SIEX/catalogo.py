@@ -1,4 +1,5 @@
 from time import sleep
+from platform import system
 from os.path import join
 import os
 import scrapy
@@ -22,6 +23,20 @@ from selenium.webdriver.firefox.options import Options as FirefoxOptions
 
 # VARIABLES
 url = 'https://www3.sede.fega.gob.es/bdcsixpor/mantenimiento-de-tablas'
+
+system = system()
+browser_paths = {
+    'brave': {
+        'Linux': '/usr/bin/brave-browser',
+        'Windows': "C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe",
+        'MacOS': '/Applications/Brave Browser.app/Contents/MacOS/Brave Browser'
+    },
+    'chromium': {
+        'Linux': '/usr/bin/chromium-browser',
+        'Windows': 'C:/Users/'+os.getlogin()+'/AppData/Local/Chromium/Application/chrome.exe',
+        'MacOS': '/Applications/Chromium Browser.app/Contents/MacOS/Chromium Browser'
+    }
+}
 
 parent_selector =       'p-panelmenu'
 list_selector =         '.menu_hijos'
@@ -81,10 +96,18 @@ class CatalogoSpider(scrapy.Spider):
         # Chromium (sin testear)
         elif (browser == 'chromium'):
             service = ChromeService(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
+            chromium_paths = browser_paths.get('chromium')
+            if chromium_paths:
+                chromium_install = chromium_paths.get(str(system))
+                chrome_options.binary_location = chromium_install if chromium_install else ''
             self.driver = webdriver.Chrome(service = service, chrome_options=chrome_options)
         # Brave (sin testear)
         elif (browser == 'brave'):
             service = ChromeService(ChromeDriverManager(chrome_type=ChromeType.BRAVE).install())
+            brave_paths = browser_paths.get('brave')
+            if brave_paths:
+                brave_install = brave_paths.get(str(system))
+                chrome_options.binary_location = brave_install if brave_install else ''
             self.driver = webdriver.Chrome(service = service, chrome_options=chrome_options)
         else:
             raise ValueError('Navegador no soportado')
