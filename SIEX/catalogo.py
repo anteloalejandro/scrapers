@@ -16,6 +16,7 @@ from webdriver_manager.microsoft import EdgeChromiumDriverManager as EdgeDriverM
 # Drivers para firefox
 from selenium.webdriver.firefox.service import Service as FirefoxService
 from webdriver_manager.firefox import GeckoDriverManager
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
 
 
 # VARIABLES
@@ -40,14 +41,14 @@ class CatalogoSpider(scrapy.Spider):
             os.makedirs(download_dir)
 
         # Configuración de firefox
-        profile = webdriver.FirefoxProfile()
-        if (profile):
-            profile.set_preference("browser.download.folderList", 2)
-            profile.set_preference("browser.download.dir", download_dir)
+        firefox_options = FirefoxOptions()
+        if firefox_options:
+            firefox_options.set_preference("browser.download.folderList", 2)
+            firefox_options.set_preference("browser.download.dir", download_dir)
 
         # Firefox
         service = FirefoxService(GeckoDriverManager().install())
-        self.driver = webdriver.Firefox(service = service, firefox_profile=profile)
+        self.driver = webdriver.Firefox(service = service, options=firefox_options)
 
         ## Chromium (sin testear)
         # service = ChromeService(ChromeDriverManager().install())
