@@ -36,7 +36,7 @@ class CatalogoSpider(scrapy.Spider):
     last_file_list = []
 
     # Inicializar webdriver
-    def __init__(self):
+    def __init__(self, browser):
 
         # Directorio de descarga
         script_name = os.path.basename(os.path.splitext(__file__)[0])
@@ -63,25 +63,30 @@ class CatalogoSpider(scrapy.Spider):
         edge_options.add_experimental_option('prefs', {
             "download.default_directory": self.download_dir,
         })
-        ## Chromium (sin testear)
-        # service = ChromeService(ChromeDriverManager().install())
-        # self.driver = webdriver.Chrome(service = service, chrome_options=chrome_options)
-
-        ## Edge (sin testear)
-        # service = EdgeService(EdgeDriverManager().install())
-        # self.driver = webdriver.Edge(service = service, options=edge_options)
-
-        ## Chromium (sin testear)
-        # service = ChromeService(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
-        # self.driver = webdriver.Chrome(service = service, chrome_options=chrome_options)
-
-        ## Brave (sin testear)
-        # service = ChromeService(ChromeDriverManager(chrome_type=ChromeType.BRAVE).install())
-        # self.driver = webdriver.Chrome(service = service, chrome_options=chrome_options)
 
         # Firefox
-        service = FirefoxService(GeckoDriverManager().install())
-        self.driver = webdriver.Firefox(service = service, options=firefox_options)
+        if (browser == 'firefox'):
+            service = FirefoxService(GeckoDriverManager().install())
+            self.driver = webdriver.Firefox(service = service, options=firefox_options)
+        # Chrome (sin testear)
+        elif (browser == 'chrome'):
+            service = ChromeService(ChromeDriverManager().install())
+            self.driver = webdriver.Chrome(service = service, chrome_options=chrome_options)
+        # Edge (sin testear)
+        elif (browser == 'edge'):
+            service = EdgeService(EdgeDriverManager().install())
+            self.driver = webdriver.Edge(service = service, options=edge_options)
+        # Chromium (sin testear)
+        elif (browser == 'edge'):
+            service = ChromeService(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
+            self.driver = webdriver.Chrome(service = service, chrome_options=chrome_options)
+        # Brave (sin testear)
+        elif (browser == 'brave'):
+            service = ChromeService(ChromeDriverManager(chrome_type=ChromeType.BRAVE).install())
+            self.driver = webdriver.Chrome(service = service, chrome_options=chrome_options)
+        else:
+            raise ValueError('Navegador no soportado')
+
 
     # Ejecutar el código principal por cada una de las URLs
     def start_requests(self):

@@ -42,6 +42,17 @@ _Si se pretende usar los scripts con alguno de los navegadores no soportados, se
 
 # Uso
 
+Mostrar ayuda
 ```sh
-python3 main.py {scraper}
+python3 main.py
+```
+
+Lanzar _scraper_ con el navegador por defecto (Firefox)
+```sh
+python3 main.py <scraper>
+```
+
+Lanzar _scraper_ con el _navegador_ indicado
+```sh
+python3 main.py <scraper> <navegador>
 ```

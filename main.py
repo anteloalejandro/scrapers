@@ -2,13 +2,18 @@ import sys
 from scrapy.crawler import CrawlerProcess
 from SIEX.catalogo import CatalogoSpider
 
-scraper = sys.argv[1] if len(sys.argv) > 1 else ""
+scraper = sys.argv[1].lower() if len(sys.argv) > 1 else ""
+browser = sys.argv[2].lower() if len(sys.argv) > 2 else "firefox"
 crawlerDict = {
     "catalogo": CatalogoSpider
 }
 help = """
-- Método de uso -
-python3 main.py {scraper}
+- Métodos de uso -
+Lanzar _scraper_ con el navegador por defecto (Firefox)
+python3 main.py <scraper>
+
+Lanzar _scraper_ con el _navegador_ indicado
+python3 main.py <scraper> <navegador>
 
 - Scrapers disponibles -"""
 
@@ -20,5 +25,5 @@ if __name__ == "__main__":
         exit(0)
 
     process = CrawlerProcess()
-    process.crawl(crawlerDict.get(scraper))
+    process.crawl(crawlerDict.get(scraper), browser=browser)
     process.start()
