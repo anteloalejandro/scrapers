@@ -48,25 +48,38 @@ class CatalogoSpider(scrapy.Spider):
             firefox_options.set_preference("browser.download.folderList", 2)
             firefox_options.set_preference("browser.download.dir", self.download_dir)
 
-        # Firefox
-        service = FirefoxService(GeckoDriverManager().install())
-        self.driver = webdriver.Firefox(service = service, options=firefox_options)
+        # Configuración de chrome
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_experimental_option('prefs', {
+            "download.default_directory": self.download_dir,
+            "download.prompt_for_download": False,
+            "download.directory_upgrade": True
+        })
 
+        # Configuración de Edge
+        edge_options = webdriver.EdgeOptions()
+        edge_options.add_experimental_option('prefs', {
+            "download.default_directory": self.download_dir,
+        })
         ## Chromium (sin testear)
         # service = ChromeService(ChromeDriverManager().install())
-        # self.driver = webdriver.Chrome(service = service)
+        # self.driver = webdriver.Chrome(service = service, chrome_options=chrome_options)
 
         ## Edge (sin testear)
         # service = EdgeService(EdgeDriverManager().install())
-        # self.driver = webdriver.Edge(service = service)
+        # self.driver = webdriver.Edge(service = service, options=edge_options)
 
         ## Chromium (sin testear)
         # service = ChromeService(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
-        # self.driver = webdriver.Chrome(service = service)
+        # self.driver = webdriver.Chrome(service = service, chrome_options=chrome_options)
 
         ## Brave (sin testear)
         # service = ChromeService(ChromeDriverManager(chrome_type=ChromeType.BRAVE).install())
-        # self.driver = webdriver.Chrome(service = service)
+        # self.driver = webdriver.Chrome(service = service, chrome_options=chrome_options)
+
+        # Firefox
+        service = FirefoxService(GeckoDriverManager().install())
+        self.driver = webdriver.Firefox(service = service, options=firefox_options)
 
     # Ejecutar el código principal por cada una de las URLs
     def start_requests(self):
