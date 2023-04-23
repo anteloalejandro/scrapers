@@ -20,10 +20,10 @@ Descarga los archivos en `SIEX/downloads/catalogo`.
 - `webdriver-manager`
 - Uno de los siguienes navegadores:
 	- Firefox
+	- Chrome
+	- Edge
 	- Chromium (sin testear)
-	- Chrome (sin testear)
 	- Brave (sin testear)
-	- Edge (sin testear)
 
 # Instalación
 

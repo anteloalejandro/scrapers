@@ -79,7 +79,7 @@ class CatalogoSpider(scrapy.Spider):
             service = EdgeService(EdgeDriverManager().install())
             self.driver = webdriver.Edge(service = service, options=edge_options)
         # Chromium (sin testear)
-        elif (browser == 'edge'):
+        elif (browser == 'chromium'):
             service = ChromeService(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
             self.driver = webdriver.Chrome(service = service, chrome_options=chrome_options)
         # Brave (sin testear)
