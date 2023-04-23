@@ -22,10 +22,11 @@ from selenium.webdriver.firefox.options import Options as FirefoxOptions
 # VARIABLES
 url = 'https://www3.sede.fega.gob.es/bdcsixpor/mantenimiento-de-tablas'
 
-list_selector =     '.menu_hijos'
-link_selector =     'p-panelmenusub .p-menuitem'
-boton_selector =    'app-boton-exportar button'
-cerrar_selector =   'p-dialog button.p-dialog-header-close'
+list_selector =         '.menu_hijos'
+list_name_selector =    '.p-menuitem-text'
+link_selector =         'p-panelmenusub .p-menuitem'
+boton_selector =        'app-boton-exportar button'
+cerrar_selector =       'p-dialog button.p-dialog-header-close'
 
 class CatalogoSpider(scrapy.Spider):
     name = 'catalogo_spider'
@@ -146,12 +147,11 @@ class CatalogoSpider(scrapy.Spider):
 
         sleep(1)
         elements = self.find(list_selector)
-        count = 0
         for element in elements:
+            nameElement = self.findOne(list_name_selector, element)
+            name = nameElement.text if nameElement else 'no_name'
             element.click()
             links = self.find(link_selector, element)
-
-            count += 1
 
             for link in links:
                 link.click()
@@ -159,7 +159,7 @@ class CatalogoSpider(scrapy.Spider):
                 boton = self.findOne(boton_selector)
                 if (boton):
                     boton.click()
-                    self.moveLast(str(count))
+                    self.moveLast(name)
 
                 cerrar = self.findOne(cerrar_selector)
                 if (cerrar): cerrar.click()
